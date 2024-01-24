@@ -13,27 +13,50 @@ class NewUser extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $data;
-    public $image;
-
     /**
      * Create a new message instance.
      *
-     * @param array $data
+     * @return void
      */
-    public function __construct(array $data)
+    public $data =[];
+    public function __construct($data)
     {
-        $this->data = $data;
-        
+         $this->data = $data;
     }
 
+    /**
+     * Get the message envelope.
+     *
+     * @return \Illuminate\Mail\Mailables\Envelope
+     */
+    public function envelope()
+    {
+        return new Envelope(
+            subject: 'Welcome To The Organization',
+        );
+    }
+
+    /**
+     * Get the message content definition.
+     *
+     * @return \Illuminate\Mail\Mailables\Content
+     */
     public function build()
     {
-        return $this->subject('Welcome To The Organization ')
+        return $this->subject('Welcome')
                     ->view('new') // view file for the email
                     ->with([
-                        'data' => $this->data ,
-                        
+                        'data' => $this->data // data you want to send with the email
                     ]);
+    }
+
+    /**
+     * Get the attachments for the message.
+     *
+     * @return array
+     */
+    public function attachments()
+    {
+        return [];
     }
 }

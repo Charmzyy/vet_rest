@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\User;
+
 use App\Mail\NewUser;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -82,7 +83,8 @@ class AdminController extends Controller
                 ]);
 
                 $data = [
-                    'user' => $newUser,
+                    'firstname' => $newUser->firstname,
+                    'email' => $newUser->email,
                     'password'=> $password
     
                 ];
