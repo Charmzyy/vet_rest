@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
+use App\Models\User;
+use App\Mail\NewUser;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class AdminController extends Controller
 {
@@ -48,10 +52,58 @@ class AdminController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
+    public function createAccounts(Request $request) {
+
+        try {
+            //code...
+
+            $password = Str::random(8);
+            $validateData = $request->validate( 
+                [
+                'firstname'=>'required',
+                'lastname'=>'required',
+                'email'=>'required|email|unique:users',
+                'role_id'=>'required'
+                
+                ] 
+    
+            
+                );
+                $newUser = User::create([
+    
+                    'firstname' => $validateData['firstname'],
+                    'lastname' => $validateData['lastname'],
+                    'email' => $validateData['email'],
+                    'role_id'=>$validateData['role_id'],
+                    'password'=>$password,
+                    'confirm_password'=>$password
+                     
+    
+                ]);
+
+                $data = [
+                    'user' => $newUser,
+                    'password'=> $password
+    
+                ];
+
+                $newUser->role_id =  $validateData['role_id'];
+                $newUser->save();
+                Mail::to($newUser->email)->send(new NewUser($data));
+                return response()->json([$data]);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json([$th->getMessage()],500);
+        }
+       
+
+
+
+            
+
     }
+   
 
     /**
      * Store a newly created resource in storage.
