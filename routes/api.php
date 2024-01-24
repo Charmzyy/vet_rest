@@ -16,10 +16,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-
-
-   
+Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
+    Route::post('create/roles',[AdminController::class,'createroles']);
 });
 
 Route::controller(AuthController::class)->group(function () {

@@ -10,18 +10,38 @@ class AdminController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function create_roles(Request $request)
+    public function createroles(Request $request)
 
-    {
+    {    try {
+        //code...
         $validateData = $request->validate([
-           'name'=> 'required',
-           'description'=>'required',
-        ]);
+            'name'=> 'required',
+            'description'=>'required',
+         ]);
+ 
+         $role = Role::create([
+             'name'=>$validateData['name'],
+             'description'=>$validateData['description']
+         ]);
+         
+ 
+         return response()->json([ 
+           'role'=> $role
+ 
+         ]);
 
-        $role = Role::create([
-            'name'=>$validateData['name'],
-            'description'=>$validateData['description']
-        ]);
+
+    } catch (\Throwable $th) {
+
+    return response()->json([
+        $th->getMessage()
+    ]);
+
+        //throw $th;
+    }
+       
+
+
         //
     }
 
