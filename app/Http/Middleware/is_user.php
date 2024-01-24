@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class is_doctor
+class is_user
 {
     /**
      * Handle an incoming request.
@@ -15,16 +15,15 @@ class is_doctor
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
-    {
-        if(Auth::check()&& Auth::user()->role_id == 1){
-            
-        }
-        else
-        {
-            return response()->json([
-                "Message"=>"Not Authorized"
-            ],401);
-        }
+    {   if(Auth::check()&& Auth::user()->role_id ==2){
+
+
+    }
+    else {
+        return response()->json([
+            'Message'=>'Not Authorized'
+        ],401);
+    }
         return $next($request);
     }
 }

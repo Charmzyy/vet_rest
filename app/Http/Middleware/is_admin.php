@@ -16,7 +16,7 @@ class is_admin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::check()&& Auth::user()->role == 0){
+        if(Auth::check()&& Auth::user()->role_id == 0){
             
         }
         else
