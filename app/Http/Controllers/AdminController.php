@@ -138,18 +138,18 @@ class AdminController extends Controller
     /**
      * Display the specified resource.
      */
-    public function createbreed(Request $request)
+    public function createbreeds(Request $request)
     {
         try {
             //code...
             $validateData = $request->validate( 
                 [
-                'name'=>'required|unique:breeds',
+                'breed_name'=>'required|unique:breeds',
                 'species_id'=>'required'
                 
                 ] );
-                $breed = Breed::create(['name' => $validateData['name'],
-            'specie_id' => $validateData['specie_id'] ]);
+                $breed = Breed::create(['breed_name' => $validateData['breed_name'],
+            'species_id' => $validateData['species_id'] ]);
     
                 return response()->json([
                     'breed'=>$breed,

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DateTime;
 use Carbon\Carbon;
 use App\Models\Pet;
+use App\Rules\PastDate;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 
@@ -19,19 +20,19 @@ class UserController extends Controller
         try {
             //code...
             $today = Carbon::now(); 
+            $userId = $request->user()->id;
             $validateData = $request->validate([
 
-                'petname'=>'required',
-                'owner_id' => 'required',
+                'pet_name'=>'required',
                 'species_id'=>'required',
                 'breed_id' => 'required',
-                'dob' => 'required|DateTime',
+                'dob' => ['required', new PastDate]
                 
     
             ]);
             $pet = Pet::create([
-                'petname'=> $validateData['petname'],
-                'owner_id' => $validateData['owner_id'],
+                'pet_name'=> $validateData['pet_name'],
+                'owner_id' => $userId,
                 'species_id'=> $validateData['species_id'],
                 'breed_id' => $validateData['breed_id'],
                 'dob' => $validateData['dob'],
@@ -60,11 +61,10 @@ class UserController extends Controller
         try {
             //code...
             $today = Carbon::now();
+            $userId = $request->user()->id;
             $validateData = $request->validate([
 
                 'description'=>'required',
-                 'owner_id'=> 'required',
-                'pet_id' => 'required',
                 'book_date'=>'required|date|after_or_equal:'.$today->toDateString(),
                 'book_time'=>'required|date_format:H:i',
     
@@ -72,7 +72,7 @@ class UserController extends Controller
             $appointment = Appointment::create([
     
                 'description' => $validateData['description'],
-                'owner_id' => auth()->user(),
+                'owner_id' => $userId,
                 'book_date'=> $validateData['book_date'],
                 'book_time'=> $validateData['book_time'],
                 'pet_id' => $id,

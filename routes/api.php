@@ -20,8 +20,8 @@ use App\Http\Controllers\AdminController;
 Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
     Route::post('create/roles',[AdminController::class,'createroles']);
     Route::post('create/newusers',[AdminController::class,'createAccounts']);
-    Route::post('create/newusers',[AdminController::class,'createAccounts']);
-    Route::post('create/newusers',[AdminController::class,'createAccounts']);
+    Route::post('create/species',[AdminController::class,'createspecies']);
+    Route::post('create/breeds',[AdminController::class,'createbreeds']);
 
 
 });
@@ -29,8 +29,8 @@ Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
 
 //user 
 Route::middleware(['auth:sanctum', 'is_user'])->group(function () {
-    Route::post('create/roles',[UserController::class,'createpet']);
-    Route::post('create/roles',[UserController::class,'createappointment']);
+    Route::post('create/pet',[UserController::class,'createpet']);
+    Route::post('create/{id}/appointment',[UserController::class,'createappointment']);
     
     
 
