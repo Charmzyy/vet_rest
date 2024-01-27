@@ -110,9 +110,26 @@ class AdminController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function createspecies(Request $request)
     {
-        //
+        $validateData = $request->validate( 
+            [
+            'firstname'=>'required',
+            'lastname'=>'required',
+            'email'=>'required|email|unique:users',
+            'role_id'=>'required'
+            
+            ] 
+
+        
+            );
+            $specie = ::create([
+
+                'firstname' => $validateData['firstname'],
+                
+                 
+
+            ]);
     }
 
     /**
