@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Models\User;
 
 use App\Mail\NewUser;
+use App\Models\Specie;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -112,24 +113,29 @@ class AdminController extends Controller
      */
     public function createspecies(Request $request)
     {
-        $validateData = $request->validate( 
-            [
-            'firstname'=>'required',
-            'lastname'=>'required',
-            'email'=>'required|email|unique:users',
-            'role_id'=>'required'
-            
-            ] 
-
-        
-            );
-            $specie = ::create([
-
-                'firstname' => $validateData['firstname'],
+        try {
+            //code...
+            $validateData = $request->validate( 
+                [
+                'name'=>'required|unique:species',
                 
-                 
+                ] );
+                $specie = Specie::create(['name' => $validateData['name'], ]);
+    
+                return response()->json([
+                    'specie'=>$specie,
+                    'message' => 'created Succesully',],201);
 
-            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+
+            return response()->json([$th->getMessage()],500);
+        }
+        
+
+
+
+
     }
 
     /**
