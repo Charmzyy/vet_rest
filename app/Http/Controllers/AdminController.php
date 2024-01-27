@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Models\User;
 
 use App\Mail\NewUser;
+use App\Models\Breed;
 use App\Models\Specie;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -131,19 +132,34 @@ class AdminController extends Controller
 
             return response()->json([$th->getMessage()],500);
         }
-        
-
-
-
 
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function createbreed(Request $request)
     {
-        //
+        try {
+            //code...
+            $validateData = $request->validate( 
+                [
+                'name'=>'required|unique:breeds',
+                'species_id'=>'required'
+                
+                ] );
+                $breed = Breed::create(['name' => $validateData['name'],
+            'specie_id' => $validateData['specie_id'] ]);
+    
+                return response()->json([
+                    'breed'=>$breed,
+                    'message' => 'created Succesully',],201);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+
+            return response()->json([$th->getMessage()],500);
+        }
     }
 
     /**
