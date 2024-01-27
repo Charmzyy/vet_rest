@@ -31,7 +31,11 @@ class Pet extends Model
         return ['id'];
     }
 
-    public function myowner(){
+    public function owner(){
         return $this->belongsTo(User::class,'owner_id');
+    }
+
+    public function appointments() {
+        return $this->hasMany(Appointment::class);
     }
 }

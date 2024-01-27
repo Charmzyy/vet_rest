@@ -52,10 +52,10 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function myappts(){
-        return $this->hasMany(Appointment::class);
+    public function myAppointmentsAsOwner(){
+        return $this->hasMany(Appointment::class,'owner_id');
     }
-    public function mywork(){
+    public function myAppointmentAsDoctor(){
         return $this->hasMany(Appointment::class, 'doc_id');
     }
 

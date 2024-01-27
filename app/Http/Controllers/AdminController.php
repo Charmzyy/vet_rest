@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Models\User;
 
 use App\Mail\NewUser;
+use App\Models\Appointment;
 use App\Models\Breed;
 use App\Models\Specie;
 use Illuminate\Support\Str;
@@ -165,9 +166,59 @@ class AdminController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function assigndoctor(Request $request, $id)
     {
-        //
+        //assign doctor
+        try {
+            //code...
+            $appointment = Appointment::findOrfail();
+            if(!$appointment){
+                return response()->json(['Message'=>'Appointment Not found'],404);
+            }
+            $docId = $request->input('doc_id');
+            $appointment->doc_id = $docId;
+            $appointment->status = 'confirmed';
+            $appointment->save();
+
+            return response()->json([
+                'appointment' => $appointment,
+                'message' =>'appointment assigned successully'
+            ],201);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json([$th->getMessage()],500);
+        }
+       
+
+    }
+
+    public function getNew() {
+           $appointments = Appointment::where('status','pending')->get();
+           if($appointments->IsEmpty()){
+            return response()->json([ 'Message' => 'No Any new Appointments']);
+           }
+           $appointmentsData = [];
+           foreach($appointments as $appointment) {
+
+            $ownerName = $appointment->pet->owner->firstname;
+            $appointmentsData[] = [
+                'appointment' => $appointment,
+                'owner' => $ownerName
+            ];
+
+            return response()->json([
+                'appointments' => $appointmentsData
+            ]);
+
+            
+
+           }
+
+           return response()->json([
+               'appointment' => $appointmentsData,
+               
+           ]);
     }
 
     /**
