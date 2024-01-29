@@ -17,7 +17,7 @@ return new class extends Migration
             $table->uuid('owner_id');
             $table->unsignedBigInteger('species_id');
             $table->unsignedBigInteger('breed_id');
-            $table->datetime('dob');
+            $table->date('dob');
             $table->foreign('owner_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('species_id')->references('id')->on('species')->onDelete('cascade');
             $table->foreign('breed_id')->references('id')->on('breeds')->onDelete('cascade');
