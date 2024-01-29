@@ -21,7 +21,8 @@ class Appointment extends Model
         'doc_id',
         'owner_id',
         'book_date',
-        'book_time'
+        'book_time',
+        'room'
 
     ];
 

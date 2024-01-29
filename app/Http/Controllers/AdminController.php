@@ -172,7 +172,8 @@ class AdminController extends Controller
                 return response()->json(['Message'=>'Appointment Not found'],404);
             }
             $validateData = $request->validate([
-            'doc_id'=>'required'
+            'doc_id'=>'required',
+            'room' => 'required'
             ]);
             $appointment->doc_id = $validateData['doc_id'];
             $appointment->status = 'confirmed';
