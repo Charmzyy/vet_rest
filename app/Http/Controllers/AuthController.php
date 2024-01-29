@@ -35,19 +35,21 @@ class AuthController extends Controller
 
         ]);
 
-         if(User::count() >= 1) {
+        if (User::count() == 1) {
+            $user->role_id = 0; // Set default role to 1 for the first user added
+            $user->save();
+        }
+        else {
             $user->role_id = 2;
             $user->save();
-         }
+        }
          $token = $user->createToken('token')->plainTextToken;
 
-         $data = [
-            $user,
-            $token 
-         ];
+         
 
         return response()->json([
-            $data
+            'user' => $user,
+            'token' => $token 
         ],201);
         } catch (\Throwable $th) {
             //throw $th;
