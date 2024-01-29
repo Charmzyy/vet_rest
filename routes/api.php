@@ -22,6 +22,10 @@ Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
     Route::post('create/newusers',[AdminController::class,'createAccounts']);
     Route::post('create/species',[AdminController::class,'createspecies']);
     Route::post('create/breeds',[AdminController::class,'createbreeds']);
+    Route::put('assign/{id}/doctor',[AdminController::class,'assigndoctor']);
+    Route::get('new/appointments',[AdminController::class,'getNew']);
+    Route::get('all/doctors',[AdminController::class,'alldoctors']);
+    
 
 
 });
@@ -31,6 +35,7 @@ Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
 Route::middleware(['auth:sanctum', 'is_user'])->group(function () {
     Route::post('create/pet',[UserController::class,'createpet']);
     Route::post('create/{id}/appointment',[UserController::class,'createappointment']);
+    
     
     
 

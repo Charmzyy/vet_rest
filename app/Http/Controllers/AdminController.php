@@ -47,10 +47,6 @@ class AdminController extends Controller
 
         //throw $th;
     }
-       
-
-
-        //
     }
 
     /**
@@ -171,12 +167,14 @@ class AdminController extends Controller
         //assign doctor
         try {
             //code...
-            $appointment = Appointment::findOrfail();
+            $appointment = Appointment::findOrfail($id);
             if(!$appointment){
                 return response()->json(['Message'=>'Appointment Not found'],404);
             }
-            $docId = $request->input('doc_id');
-            $appointment->doc_id = $docId;
+            $validateData = $request->validate([
+            'doc_id'=>'required'
+            ]);
+            $appointment->doc_id = $validateData['doc_id'];
             $appointment->status = 'confirmed';
             $appointment->save();
 
@@ -221,12 +219,35 @@ class AdminController extends Controller
            ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function alldoctors(){
+        
+        
+try {
+    
+    $doctors = User::where('role_id','1')->get();
+        if($doctors->isEmpty()){
+            return response()->json(['Message'=> 'No Doctors Available']);
+
+        }
+        
+        return response()->json([
+            
+                'doctors' => $doctors
+            
+            
+        ],200);
+
+
+} catch (\Throwable $th) {
+    //throw $th;
+
+    return response()->json([
+   $th->getMessage()
+    ],500);
+}
+
+        
+
     }
 
     /**
@@ -234,6 +255,12 @@ class AdminController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::findOrfail($id);
+        if($user->isEmpty()){
+            return response()->json([
+                'Message'=> 'No user found'
+            ]);
+        }
+        $user->delete();
     }
 }
