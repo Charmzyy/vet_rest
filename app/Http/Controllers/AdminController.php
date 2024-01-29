@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
-use App\Models\User;
+use App\Models\Room;
 
+use App\Models\User;
 use App\Mail\NewUser;
-use App\Models\Appointment;
 use App\Models\Breed;
 use App\Models\Specie;
+use App\Models\Appointment;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -159,6 +160,31 @@ class AdminController extends Controller
         }
     }
 
+    public function createRooms(Request $request) {
+
+       try {
+        //code...
+        $validateData = $request->validate([
+            'number' => 'required',
+    
+           ]);
+           $room = Room::create([
+            'number' => $validateData['number']
+           ]);
+    
+           return response()->json([
+            'room' => $room,
+            'messsage'=> 'room created succesfully'
+           ],201);
+    
+       } catch (\Throwable $th) {
+        //throw $th;
+        return response()->json([
+            $th->getMessage()
+        ],500);
+       }
+       
+    }
     /**
      * Show the form for editing the specified resource.
      */
@@ -246,9 +272,12 @@ try {
    $th->getMessage()
     ],500);
 }
+    }
 
-        
+    public function getAvailableRooms() {
 
+        $rooms = Room::where('is_available', '1')->get();
+        return response
     }
 
     /**
