@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('password');
             $table->string('confirm_password');
             $table->string('avatar')->nullable();
+            $table->text('phone')->nullable();
+            $table->boolean('is_available')->nullable();
 
             $table->rememberToken();
             $table->timestamps();

@@ -194,9 +194,11 @@ class AdminController extends Controller
         try {
             //code...
             $appointment = Appointment::findOrfail($id);
+
             if(!$appointment){
                 return response()->json(['Message'=>'Appointment Not found'],404);
             }
+            
             $validateData = $request->validate([
             'doc_id'=>'required',
             'room' => 'required'
@@ -214,8 +216,6 @@ class AdminController extends Controller
             //throw $th;
             return response()->json([$th->getMessage()],500);
         }
-       
-
     }
 
     public function getNew() {
@@ -235,9 +235,6 @@ class AdminController extends Controller
             return response()->json([
                 'appointments' => $appointmentsData
             ]);
-
-            
-
            }
 
            return response()->json([
@@ -246,28 +243,16 @@ class AdminController extends Controller
            ]);
     }
 
-    public function alldoctors(){
-        
-        
+    public function alldoctors(){  
+
 try {
-    
-    $doctors = User::where('role_id','1')->get();
+     $doctors = User::where('role_id','1')->get();
         if($doctors->isEmpty()){
-            return response()->json(['Message'=> 'No Doctors Available']);
-
-        }
-        
-        return response()->json([
-            
-                'doctors' => $doctors
-            
-            
+            return response()->json(['Message'=> 'No Doctors Available']); }
+         return response()->json([
+              'doctors' => $doctors
         ],200);
-
-
 } catch (\Throwable $th) {
-    //throw $th;
-
     return response()->json([
    $th->getMessage()
     ],500);
@@ -277,8 +262,12 @@ try {
     public function getAvailableRooms() {
 
         $rooms = Room::where('is_available', '1')->get();
-        
+        return response()->json([
+        'rooms' => $rooms,
+        'message' => 'All Available Rooms'
+        ]);
     }
+
 
     /**
      * Remove the specified resource from storage.
