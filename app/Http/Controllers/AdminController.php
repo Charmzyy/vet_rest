@@ -277,7 +277,7 @@ try {
     public function getAvailableRooms() {
 
         $rooms = Room::where('is_available', '1')->get();
-        return response
+        
     }
 
     /**
