@@ -17,5 +17,8 @@ class Room extends Model
         'is_available'
     ];
 
-    
+    public function room()
+    {
+        return $this->belongsTo(Room::class, 'room_number');
+    }
 }

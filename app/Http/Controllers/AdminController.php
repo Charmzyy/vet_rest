@@ -90,6 +90,7 @@ class AdminController extends Controller
                 ];
 
                 $newUser->role_id =  $validateData['role_id'];
+                $newUser->is_available  = true;
                 $newUser->save();
                 Mail::to($newUser->email)->send(new NewUser($data));
                 return response()->json([$data]);
@@ -193,20 +194,57 @@ class AdminController extends Controller
         //assign doctor
         try {
             //code...
-            $appointment = Appointment::findOrfail($id);
+            $appointment = Appointment::find($id);
+            if(!$appointment->isEmpty()){
+                return response()->json([
+                    'Message' => 'Appointment Not ound'
+                ],404);
+            }
 
-            if(!$appointment){
-                return response()->json(['Message'=>'Appointment Not found'],404);
+            $validateData = $request->validate([
+                'doc_id'=>'required',
+                'room_number' => 'required'
+                ]);
+
+            $doctor = User::where('role_id','1')->find($validateData['doc_id']);
+            $room =Room::find($validateData['room_number']);
+
+            if(!$doctor || !$room){
+                 return response()->json([
+                    'Message' =>  'Doctor and Room not available'
+                 ]);
+
             }
             
-            $validateData = $request->validate([
-            'doc_id'=>'required',
-            'room' => 'required'
-            ]);
-            $appointment->doc_id = $validateData['doc_id'];
+            if(!$doctor) {
+                return response()->json([
+                    'Message' =>  'Doctor not available'
+                 ]);
+            }
+
+            if (!$room) {
+                return response()->json([
+                    'Message' =>  'Doctor not available'
+                 ]);
+            }
+
+            $appointment->doc_id = $doctor->id;
+            $appointment->room_number  =$room->id;
             $appointment->status = 'confirmed';
             $appointment->save();
 
+            $room->update(['is_available' => false]);
+            $room->save();
+
+            return response()->json([
+                'appointment' => $appointment,
+                'message' => 'Appointment assigned successfully',
+            ], 201);
+
+           
+
+
+        
             return response()->json([
                 'appointment' => $appointment,
                 'message' =>'appointment assigned successully'

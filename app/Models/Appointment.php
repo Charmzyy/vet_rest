@@ -34,4 +34,8 @@ class Appointment extends Model
     public function pet(){
         return $this->belongsTo(Pet::class,'pet_id');
     }
+
+    public function roomtouse(){
+        return $this->hasOne(Room::class);
+    }
 }

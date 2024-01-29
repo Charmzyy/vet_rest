@@ -17,4 +17,5 @@ class Role extends Model
         'description'
     ];
     
+    
 }
