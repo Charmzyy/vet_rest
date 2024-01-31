@@ -38,4 +38,8 @@ class Appointment extends Model
     public function roomtouse(){
         return $this->hasOne(Room::class);
     }
+
+    public function mymedicalrecord (){
+        return $this->hasOne(MedicalRecord::class);
+    }
 }

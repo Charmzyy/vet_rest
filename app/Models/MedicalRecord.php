@@ -15,12 +15,16 @@ class MedicalRecord extends Model
     
     public $incrementing = false;
     protected $fillable = [
+        'appointment_id',
         'title',
         'description',
         
     ];
 
-    public function myrecord(){
+    public function myappointment(){
         return $this->belongsTo(Appointment::class,'appointment_id');
+    }
+    public function myfiles(){
+        return $this->hasMany(MedicalRecordFile::class);
     }
 }

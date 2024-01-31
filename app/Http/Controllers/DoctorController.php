@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Models\MedicalRecord;
+use App\Models\MedicalRecordFile;
 use Illuminate\Http\Request;
 
 class DoctorController extends Controller
@@ -22,11 +24,13 @@ class DoctorController extends Controller
         foreach ($pendingAppointments as $pendingAppointment) {
 
             $data [] = [
+                'id' =>$pendingAppointment->id,
                 'petname' => $pendingAppointment->pet->pet_name,
                  'owner'=> $pendingAppointment->pet->owner->firstname,
                  'description' => $pendingAppointment->description,
             ];
         }
+      
             return response()->json([
                 'appointments' => $data
             ]);
@@ -47,9 +51,57 @@ class DoctorController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request,$id)
+
     {
-        //
+        try {
+            //code...
+            $appointment = Appointment::findOrfail($id);
+            $validateData = $request->validate([
+            'title' => 'required',
+            'description'=> 'required',
+            'images.*'=> 'image|mimes:jpeg,jpg,png,bmp|max:4080'
+            ]);
+    
+            $medical_record = MedicalRecord::create([
+                'appointment_id' => $appointment->id,
+                'title'=> $validateData['title'],
+                'description' => $validateData['description']
+            ]);
+    
+            
+            if($request->hasFile('images')){
+                foreach ($request->file('images') as $image) {
+    
+                    $filepath = $image->store('medical_records_files','public');
+    
+                    $medical_record->myfiles()->create([
+                        'medical_record_id' => $medical_record->id,
+                        'file_path' => $filepath,
+
+                    ]);
+                       
+                  
+                    # code...
+                
+                }
+    
+                return response()->json([
+                    'medical_record' => $medical_record,
+                    
+                    'Message' => 'Created Successfully',
+                ],201);
+            }
+
+        } catch (\Throwable $th) {
+            //throw $th;
+
+            return response()->json([
+                $th->getMessage()
+            ],500);
+        }
+       
+
     }
 
     /**
