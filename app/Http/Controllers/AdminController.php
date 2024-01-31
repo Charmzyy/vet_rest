@@ -194,12 +194,8 @@ class AdminController extends Controller
         //assign doctor
         try {
             //code...
-            $appointment = Appointment::find($id);
-            if(!$appointment->isEmpty()){
-                return response()->json([
-                    'Message' => 'Appointment Not ound'
-                ],404);
-            }
+            $appointment = Appointment::findOrfail($id);
+           
 
             $validateData = $request->validate([
                 'doc_id'=>'required',
@@ -215,17 +211,28 @@ class AdminController extends Controller
                  ]);
 
             }
-            
-            if(!$doctor) {
-                return response()->json([
-                    'Message' =>  'Doctor not available'
-                 ]);
-            }
+            $exisitingDoctorAppointments = Appointment::where('doc_id', $doctor->id)
+                                           ->where('id', '!=', $id)
+                                           ->where('book_date', $appointment->book_date)
+                                           ->where('book_time',$appointment->book_time)
+                                           ->exists();
 
-            if (!$room) {
+            if($exisitingDoctorAppointments) {
                 return response()->json([
-                    'Message' =>  'Doctor not available'
-                 ]);
+                    'Message'=> 'Doctor already has an appointment'
+                ]);
+            }
+            
+            $exisitingRoomAppointments = Appointment::where('room', $room->id)
+                                           ->where('id', '!=', $id)
+                                           ->where('book_date', $appointment->book_date)
+                                           ->where('book_time',$appointment->book_time)
+                                           ->exists();
+
+            if($exisitingRoomAppointments) {
+                return response()->json([
+                    'Message'=> 'Room has  already been booked '
+                ]);
             }
 
             $appointment->doc_id = $doctor->id;
@@ -240,11 +247,6 @@ class AdminController extends Controller
                 'appointment' => $appointment,
                 'message' => 'Appointment assigned successfully',
             ], 201);
-
-           
-
-
-        
             return response()->json([
                 'appointment' => $appointment,
                 'message' =>'appointment assigned successully'
