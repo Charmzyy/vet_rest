@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DoctorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,11 +27,20 @@ Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
     Route::put('assign/{id}/doctor',[AdminController::class,'assigndoctor']);
     Route::get('new/appointments',[AdminController::class,'getNew']);
     Route::get('all/doctors',[AdminController::class,'alldoctors']);
+    Route::get('confirmed/appointments',[AdminController::class,'confirmedAppointments']);
     
 
 
 });
 
+Route::middleware(['auth:sanctum', 'is_doctor'])->group(function () {
+    Route::get('mypending/appointments',[DoctorController::class,'myPendingAppointments']);
+    
+    
+    
+    
+
+});
 
 //user 
 Route::middleware(['auth:sanctum', 'is_user'])->group(function () {

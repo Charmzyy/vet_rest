@@ -322,4 +322,23 @@ try {
         }
         $user->delete();
     }
+
+    public function confirmedAppointments() {
+        try {
+            //code...
+            $confirmedAppointments = Appointment::where('status', 'confirmed');
+            if($confirmedAppointments->isEmpty()){
+                return response()->json([
+                    'Message'=> 'No confirmed Appointment'
+                ]);
+            }
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json([
+                $th->getMessage()
+            ]);
+        }
+       
+    }
 }
