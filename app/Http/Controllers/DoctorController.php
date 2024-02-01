@@ -69,23 +69,7 @@ class DoctorController extends Controller
                 'description' => $validateData['description']
             ]);
     
-            
-            if($request->hasFile('images')){
-                foreach ($request->file('images') as $image) {
-    
-                    $filepath = $image->store('medical_records_files','public');
-    
-                    $medical_record->myfiles()->create([
-                        'medical_record_id' => $medical_record->id,
-                        'file_path' => $filepath,
 
-                    ]);
-                       
-                  
-                    # code...
-                
-                }
-    
                 return response()->json([
                     'medical_record' => $medical_record,
                     
@@ -93,7 +77,7 @@ class DoctorController extends Controller
                 ],201);
             }
 
-        } catch (\Throwable $th) {
+         catch (\Throwable $th) {
             //throw $th;
 
             return response()->json([
@@ -102,15 +86,75 @@ class DoctorController extends Controller
         }
        
 
-    }
+}
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
+    public function addFiles()
+{
+    try {
+        
+        $medicalRecord = MedicalRecord::get();
+
+        return response()->json([
+            'medical' => $medicalRecord
+        ]);
+
+
+        
+        // Validate request data
+        // $validatedData = $request->validate([
+        //     'images.*' => 'image|required|mimes:jpeg,jpg,png,bmp,gif'
+        // ]);
+
+        // $medicalFiles = [];
+
+        // // Check for and save images
+        // if ($request->hasFile('images')) {
+        //     foreach ($request->file('images') as $image) {
+        //         $filePath = $image->store('medicalfiles','public');
+
+        //         $medicalFile = MedicalRecordFile::create([
+        //             'medical_record_id' => $medicalRecord->id,
+        //             'file_path' => $filePath,
+        //         ]);
+
+        //         $medicalFiles[] = $medicalFile;
+        //     }
+        // }
+
+        // return response()->json([
+        //     'medical_files' => $medicalFiles,
+        //     'message' => 'Created successfully'
+        // ], 201);
+    } catch (\Throwable $th) {
+        return response()->json(['error' => $th->getMessage()], 500);
     }
+}
+
+
+public function find($id){
+    try {
+        //code...
+        $medi = MedicalRecord::find($id);
+          return response()->json([
+           'medi' => $medi,
+           'message' => 'successfully'
+   ]);
+
+    } catch (\Throwable $th) {
+        //throw $th;
+        return response()->json([
+            $th->getMessage()
+        ]);
+    }
+   
+
+
+
+}
+
 
     /**
      * Display the specified resource.

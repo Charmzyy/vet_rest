@@ -36,7 +36,9 @@ Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
 Route::middleware(['auth:sanctum', 'is_doctor'])->group(function () {
     Route::get('mypending/appointments',[DoctorController::class,'myPendingAppointments']);
     Route::post('create/{id}/medicalrecord',[DoctorController::class,'create']);
-    
+    Route::get('getmedicals',[DoctorController::class,'addFiles']);
+    Route::post('find/{id}',[DoctorController::class,'find']);
+
     
     
 
