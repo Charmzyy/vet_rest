@@ -1,7 +1,7 @@
 In a veterinary application, here are some additional details crucial for a doctor (veterinarian) to handle:
 
 1. **Appointment Management**:
-   - Ability to view upcoming appointments.
+   - Ability to view upcoming appointments. --done 
    - Ability to confirm, reschedule, or cancel appointments.
    - Notification system for new appointments and changes in appointments.
 

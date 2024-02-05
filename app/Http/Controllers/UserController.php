@@ -7,7 +7,9 @@ use Carbon\Carbon;
 use App\Models\Pet;
 use App\Rules\PastDate;
 use App\Models\Appointment;
+use App\Mail\RescheduleMail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -105,9 +107,29 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function rescheduleAppointment(Request $request,$id)
     {
-        //
+        //reschedule
+        $appointment = Appointment::findOrfail($id);
+        if($appointment->doc_id){
+            $doctoremail = $appointment->myDoctor->email;
+
+            }
+        $book_date = $request->input('book_date');
+        $book_time= $request->input('book_time');
+        $appointment->book_date = $book_date;
+        $appointment->book_time = $book_time;
+        $appointment->doc_id = null;
+        $appointment->save();
+
+
+        Mail::to($doctoremail)->send(new RescheduleMail);
+
+        return response()->json([
+            'message'=> 'rescheduled',
+
+        ],201);
+        
     }
 
    

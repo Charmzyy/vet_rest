@@ -42,4 +42,12 @@ class Appointment extends Model
     public function mymedicalrecord (){
         return $this->hasOne(MedicalRecord::class);
     }
+    public function myDoctor(){
+        return $this->hasOne(User::class);
+
+    }
+
+    public function myOwner(){
+        return $this->hasOne(User::class);
+    }
 }
