@@ -19,7 +19,7 @@ return new class extends Migration
             $table->uuid('owner_id');
             $table->date('book_date');
             $table->time('book_time');
-            $table->enum('status', ['pending', 'confirmed', 'cancelled'])->default('pending');
+            $table->enum('status', ['pending', 'confirmed', 'cancelled','closed'])->default('pending');
             $table->foreign('pet_id')->references('id')->on('pets')->onDelete('cascade');
             $table->foreign('doc_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('owner_id')->references('id')->on('users')->onDelete('cascade');
