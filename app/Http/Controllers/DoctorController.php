@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Models\MedicalRecord;
 use App\Models\MedicalRecordFile;
+use App\Models\Pet;
 use Illuminate\Http\Request;
 
 class DoctorController extends Controller
@@ -42,18 +43,14 @@ class DoctorController extends Controller
         return response()->json([
             $th->getMessage()
         ]);
-    }
-        
-       
-                                            
+    }                                        
     }
 
     /**
      * Show the form for creating a new resource.
      */
     public function create(Request $request,$id)
-
-    {
+    { //create medical report for an appointment 
         try {
             //code...
             $appointment = Appointment::findOrfail($id);
@@ -88,9 +85,7 @@ class DoctorController extends Controller
 
 }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
 
      public function showMedicalRecords()
      {
@@ -129,13 +124,22 @@ class DoctorController extends Controller
      * Show the form for editing the specified resource.
      * 
      * 
-     TODO:IMPLEMENT JOBS SCHEDULE TO KILL PAST JOBS
+     TODO:implement past jobs
      
      
 
      */
+    public function closeappointment(Request $request, $id){
+        //close appointment 
+        $appointment = Appointment::findOrfail($id);
+        $appointment->status = 'closed';
+        $appointment->save();
+        return response()->json([
+            'Message' => 'appointment closed successfully'
+        ],201);
+    }
     public function createMedicalFiles(Request $request, $id)
-    {
+    { //createmedical files images for each report
         $medicalRecord = MedicalRecord::find($id);
         $medicalRecordId = $medicalRecord->id;
         $validatedData = $request->validate([

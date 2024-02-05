@@ -40,7 +40,7 @@ Route::middleware(['auth:sanctum', 'is_doctor'])->group(function () {
     Route::get('getmedicals',[DoctorController::class,'showMedicalRecords']);
     Route::post('create/{id}/medicalfile',[DoctorController::class,'createMedicalFiles']);
     Route::get('show/{id}/medicals',[DoctorController::class,'showMedicals']);
-    
+    Route::post('close/{id}/appointment',[DoctorController::class,'closeappointment']);
     
     
 
