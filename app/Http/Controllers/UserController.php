@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\CancelledAppointment;
 use DateTime;
 use Carbon\Carbon;
 use App\Models\Pet;
@@ -115,6 +116,15 @@ class UserController extends Controller
             $doctoremail = $appointment->myDoctor->email;
 
             }
+        $data = [
+            'book_date' => $appointment->book_date,
+                    'book_time' => $appointment->book_time,
+                    'pet'=> $appointment->pet->pet_name
+
+        ];
+        Mail::to($doctoremail)->send(new RescheduleMail($data));
+
+       
         $book_date = $request->input('book_date');
         $book_time= $request->input('book_time');
         $appointment->book_date = $book_date;
@@ -122,8 +132,8 @@ class UserController extends Controller
         $appointment->doc_id = null;
         $appointment->save();
 
-
-        Mail::to($doctoremail)->send(new RescheduleMail);
+     
+        
 
         return response()->json([
             'message'=> 'rescheduled',
@@ -133,9 +143,32 @@ class UserController extends Controller
     }
 
    
-    public function edit(string $id)
-    {
-        //
+    public function cancelAppointment( $id)
+    {   
+        $appointment= Appointment::findOrfail($id);
+        
+
+        if($appointment->doc_id){
+            $doctoremail = $appointment->myDoctor->email; }
+        else {
+            $doctoremail = null;
+        }
+        $data = [
+            'book_date' => $appointment->book_date,
+                    'book_time' => $appointment->book_time,
+                    'pet'=> $appointment->pet->pet_name
+        ];
+        $appointment->delete();
+
+        if ($doctoremail && $appointment->status === 'confirmed') {
+            Mail::to($doctoremail)->send(new CancelledAppointment($data));
+        }
+        
+        return response()->json([
+            'message' => 'appointment cancelled'
+        ],201);
+
+
     }
 
     /**

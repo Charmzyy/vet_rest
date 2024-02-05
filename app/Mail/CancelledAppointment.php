@@ -9,18 +9,16 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class RescheduleMail extends Mailable
+class CancelledAppointment extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     */
     public $data =[];
     public function __construct($data)
     {
         $this->data = $data;
     }
+
 
     /**
      * Get the message envelope.
@@ -28,7 +26,7 @@ class RescheduleMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Reschedule Mail',
+            subject: 'Cancelled Appointment',
         );
     }
 
@@ -37,8 +35,8 @@ class RescheduleMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Appointment Reschedule')
-                    ->view('reschedule') // view file for the email
+        return $this->subject('Appointment Cancelled')
+                    ->view('cancelled') // view file for the email
                     ->with([
                         'data' => $this->data // data you want to send with the email
                     ]);
