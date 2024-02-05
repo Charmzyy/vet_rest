@@ -2,17 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Pet;
 use App\Models\Appointment;
+use Illuminate\Http\Request;
 use App\Models\MedicalRecord;
 use App\Models\MedicalRecordFile;
-use App\Models\Pet;
-use Illuminate\Http\Request;
 
 class DoctorController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    public function myappointmentstoday() {
+        $me = auth()->user()->id;
+        $today = Carbon::now();
+
+        $myappointments = Appointment::where('doc_id', $me)
+                                    ->where('book_date',$today)
+                                    ->orderBy('book_time')
+                                    ->get();
+
+        $data =  [];
+        foreach ($myappointments as $appointment) {
+            # code...
+             $data [] = [
+                'id' =>$appointment->id,
+                'petname' => $appointment->pet->pet_name,
+                 'owner'=> $appointment->pet->owner->firstname,
+                 'description' => $appointment->description,
+            ];
+        }
+        return response()->json([
+            'appointments' => $data
+        ]);
+    }
     public function myPendingAppointments()
     {   try {
         //code...
