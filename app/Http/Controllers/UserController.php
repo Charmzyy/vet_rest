@@ -98,7 +98,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //TODO:BOOK ROOOM
+        //TODO:PAY MPESA
     }
 
     /**

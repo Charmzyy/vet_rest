@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Models\MedicalRecord;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
@@ -36,9 +37,10 @@ Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
 Route::middleware(['auth:sanctum', 'is_doctor'])->group(function () {
     Route::get('mypending/appointments',[DoctorController::class,'myPendingAppointments']);
     Route::post('create/{id}/medicalrecord',[DoctorController::class,'create']);
-    Route::get('getmedicals',[DoctorController::class,'addFiles']);
-    Route::post('find/{id}',[DoctorController::class,'find']);
-
+    Route::get('getmedicals',[DoctorController::class,'showMedicalRecords']);
+    Route::post('create/{id}/medicalfile',[DoctorController::class,'createMedicalFiles']);
+    Route::get('show/{id}/medicals',[DoctorController::class,'showMedicals']);
+    
     
     
 

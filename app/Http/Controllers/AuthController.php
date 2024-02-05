@@ -115,7 +115,7 @@ class AuthController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        //TODO:UPDATE PROFILE
     }
 
     /**
@@ -131,6 +131,6 @@ class AuthController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        //TODO:logout
     }
 }

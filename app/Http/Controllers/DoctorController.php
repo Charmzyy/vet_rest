@@ -91,93 +91,98 @@ class DoctorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function addFiles()
-{
-    try {
-        
-        $medicalRecord = MedicalRecord::get();
 
-        return response()->json([
-            'medical' => $medicalRecord
-        ]);
-
-
-        
-        // Validate request data
-        // $validatedData = $request->validate([
-        //     'images.*' => 'image|required|mimes:jpeg,jpg,png,bmp,gif'
-        // ]);
-
-        // $medicalFiles = [];
-
-        // // Check for and save images
-        // if ($request->hasFile('images')) {
-        //     foreach ($request->file('images') as $image) {
-        //         $filePath = $image->store('medicalfiles','public');
-
-        //         $medicalFile = MedicalRecordFile::create([
-        //             'medical_record_id' => $medicalRecord->id,
-        //             'file_path' => $filePath,
-        //         ]);
-
-        //         $medicalFiles[] = $medicalFile;
-        //     }
-        // }
-
-        // return response()->json([
-        //     'medical_files' => $medicalFiles,
-        //     'message' => 'Created successfully'
-        // ], 201);
-    } catch (\Throwable $th) {
-        return response()->json(['error' => $th->getMessage()], 500);
-    }
-}
-
-
-public function find($id){
-    try {
-        //code...
-        $medi = MedicalRecord::find($id);
-          return response()->json([
-           'medi' => $medi,
-           'message' => 'successfully'
-   ]);
-
-    } catch (\Throwable $th) {
-        //throw $th;
-        return response()->json([
-            $th->getMessage()
-        ]);
-    }
-   
-
-
-
-}
-
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+     public function showMedicalRecords()
+     {
+         try {
+             $medicalRecords = MedicalRecord::all();
+             $data = [];
+     
+             foreach ($medicalRecords as $medicalRecord) {
+                 $medicalFiles = [];
+     
+                 // Loop through medical files associated with the current medical record
+                 foreach ($medicalRecord->myfiles as $file) {
+                     $medicalFiles[] = $file->file_path;
+                 }
+     
+                 // Collect medical record data along with associated files
+                 $data[] = [
+                     'id' => $medicalRecord->id,
+                     'title' => $medicalRecord->title,
+                     'description' => $medicalRecord->description,
+                     'medical_files' => $medicalFiles
+                 ];
+             }
+     
+             return response()->json([
+                 'medical_records' => $data
+             ]);
+         } catch (\Throwable $th) {
+             return response()->json(['error' => $th->getMessage()], 500);
+         }
+     }
+    
+    // }
 
     /**
      * Show the form for editing the specified resource.
+     * 
+     * 
+     TODO:IMPLEMENT JOBS SCHEDULE TO KILL PAST JOBS
+     
+     
+
      */
-    public function edit(string $id)
+    public function createMedicalFiles(Request $request, $id)
     {
-        //
+        $medicalRecord = MedicalRecord::find($id);
+        $medicalRecordId = $medicalRecord->id;
+        $validatedData = $request->validate([
+            'file_path' => 'image|required|mimes:jpeg,jpg,png,bmp,gif'
+        ]);
+
+        $filePath = $request->file('file_path')->store('public/uploads');
+                $medicalFile = MedicalRecordFile::create([
+                    'medical_record_id' => $medicalRecordId,
+                    'file_path' => $filePath
+                ]);
+        return response()->json([
+            'medical_files' => $medicalFile,
+            'message' => 'Created successfully'
+        ], 201);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function showMedicals($id)
     {
-        //
+        try {
+            //code...
+            $medicalRecord =  MedicalRecord::find($id)->get();
+            $medicalRecordId = $medicalRecord->id;
+            $medicalRecordTitle = $medicalRecord->title;
+            $description = $medicalRecord->description;
+            
+            // $medicalFiles = [];
+            // foreach ($medicalRecord->myfiles as $file) {
+            //     $medicalFiles [] = $file->file_path;
+            // }
+    
+    
+            return response()->json([
+                'id' => $medicalRecordId,
+                'title'=>$medicalRecordTitle,
+                'description' => $description
+                // 'medicalfiles' => $medicalFiles
+            ]);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+       
     }
 
     /**
