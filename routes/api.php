@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\MpesaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +19,15 @@ use App\Http\Controllers\DoctorController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+
+Route::get('hello', [MpesaController::class, 'index']);
+
+
 //admin
+
+
+
 Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
     Route::post('create/roles',[AdminController::class,'createroles']);
     Route::post('create/newusers',[AdminController::class,'createAccounts']);
@@ -53,13 +62,14 @@ Route::middleware(['auth:sanctum', 'is_user'])->group(function () {
     
     
     
+    
 
 });
 
-Route::controller(AuthController::class)->group(function () {
-
-Route::post('register','register');
-Route::post('login','login');
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
 
 
-});
+
+
+
