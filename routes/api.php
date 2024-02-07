@@ -21,8 +21,8 @@ use App\Http\Controllers\MpesaController;
 */
 
 
+Route::get('testpay', [MpesaController::class, 'testpay']);
 Route::get('hello', [MpesaController::class, 'index']);
-
 
 //admin
 
