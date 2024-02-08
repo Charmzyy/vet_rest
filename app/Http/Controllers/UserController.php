@@ -112,6 +112,7 @@ class UserController extends Controller
     {
         //reschedule
         $appointment = Appointment::findOrfail($id);
+        $doctorname = $appointment->myDoctor->firstname;
         if($appointment->doc_id){
             $doctoremail = $appointment->myDoctor->email;
 
@@ -119,7 +120,8 @@ class UserController extends Controller
         $data = [
             'book_date' => $appointment->book_date,
                     'book_time' => $appointment->book_time,
-                    'pet'=> $appointment->pet->pet_name
+                    'pet'=> $appointment->pet->pet_name,
+                    'name' => $doctorname
 
         ];
         Mail::to($doctoremail)->send(new RescheduleMail($data));
@@ -143,11 +145,22 @@ class UserController extends Controller
     }
 
    
-    public function cancelAppointment( $id)
+    public function cancelAppointment($id)
     {   
         $appointment= Appointment::findOrfail($id);
-        
+        $doctorname = $appointment->myDoctor->firstname;
+        $now = Carbon::now();
+        $appointmentDateTime =Carbon::parse($appointment->book_date . ' ' . $appointment->book_time);
+        if($now->diffInHours($appointmentDateTime) <= 24)
+        {
 
+            // $mpesaController = new MpesaController();
+            // $mpesaController->sendMoney();
+
+            return response()->json([
+                'Message ' => 'To finsh this you need to pay price for late cancellation '
+            ]);
+        }
         if($appointment->doc_id){
             $doctoremail = $appointment->myDoctor->email; }
         else {
@@ -156,7 +169,8 @@ class UserController extends Controller
         $data = [
             'book_date' => $appointment->book_date,
                     'book_time' => $appointment->book_time,
-                    'pet'=> $appointment->pet->pet_name
+                    'pet'=> $appointment->pet->pet_name,
+                    'name'=>$doctorname,
         ];
         $appointment->delete();
 
