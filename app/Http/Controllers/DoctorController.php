@@ -216,5 +216,29 @@ class DoctorController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    public function petHistory(string $id){
+
+        try {
+            //code...
+            $pet = Pet::findOrfail($id);
+
+     $medicalrecords = [];
+
+     foreach ($pet->appointments as $appointment) {
+        
+        $medicalrecords [] = [
+            $appointment->mymedicalrecord
+        ];
+     }
+    return response()->json([
+        'MedicalRecords '=>$medicalrecords 
+    ],200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+     
+
+    }
     
 }
