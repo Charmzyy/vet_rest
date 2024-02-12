@@ -22,7 +22,10 @@ class Pet extends Model
         'owner_id',
         'species_id',
         'breed_id',
-        'dob'
+        'dob',
+        'weight',
+        
+        
 
     ];
 

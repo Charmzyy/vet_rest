@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('species_id');
             $table->unsignedBigInteger('breed_id');
             $table->date('dob');
+            $table->unsignedBigInteger('weight')->nullable();
             $table->foreign('owner_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('species_id')->references('id')->on('species')->onDelete('cascade');
             $table->foreign('breed_id')->references('id')->on('breeds')->onDelete('cascade');

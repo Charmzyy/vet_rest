@@ -6,13 +6,13 @@ In a veterinary application, here are some additional details crucial for a doct
    - Notification system for new appointments and changes in appointments. --mail done
 
 2. **Patient Management**:
-   - Ability to view patient details including medical history, vaccinations, and previous treatments.
+   - Ability to view patient details including medical history, vaccinations, and previous treatments.--done
    - Recording and updating patient information such as weight, age, breed, and owner details.
-   - Ability to add notes and observations about patients' conditions.
+   - Ability to add notes and observations about patients' conditions.--done
 
 3. **Medical Records**:
    - Creation and management of medical records for each patient visit. --done
-   - Ability to add diagnosis, treatment plans, and prescribed medications.
+   - Ability to add diagnosis, treatment plans, and prescribed medications.--done --maybe improve
    - Uploading and storing medical images (X-rays, ultrasounds, etc.). --done 
    - Recording and tracking laboratory test results.
 

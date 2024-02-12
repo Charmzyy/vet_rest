@@ -53,6 +53,7 @@ Route::middleware(['auth:sanctum', 'is_doctor'])->group(function () {
     Route::post('create/{id}/medicalfile',[DoctorController::class,'createMedicalFiles']);
     Route::get('show/{id}/medicals',[DoctorController::class,'showMedicals']);
     Route::post('close/{id}/appointment',[DoctorController::class,'closeappointment']);
+    Route::post('change/{id}/weight',[DoctorController::class,'changeWeight']);
     
     
 
@@ -62,6 +63,8 @@ Route::middleware(['auth:sanctum', 'is_doctor'])->group(function () {
 Route::middleware(['auth:sanctum', 'is_user'])->group(function () {
     Route::post('create/pet',[UserController::class,'createpet']);
     Route::post('create/{id}/appointment',[UserController::class,'createappointment']);
+    Route::put('reshedule/{id}/appointment',[UserController::class,'rescheduleAppointment']);
+    Route::delete('close/{id}/appointment',[UserController::class,'cancelAppointment']);
     
     
     

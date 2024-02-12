@@ -153,6 +153,24 @@ class DoctorController extends Controller
      
 
      */
+
+    public function changeWeight(Request $request,string $id){
+        try {
+            //code...
+            $pet = Pet::findOrfail($id);
+        $newWeight = $request->only('weight');
+        $pet->weight = $newWeight; 
+
+        return response()->json([
+'Message'=>'Weight added successfully',
+        ],201);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['error' => $th->getMessage()], 500);
+
+        }
+        
+    }
     public function closeappointment(Request $request, $id){
         //close appointment 
         $appointment = Appointment::findOrfail($id);
