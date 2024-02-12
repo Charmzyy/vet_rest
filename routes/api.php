@@ -32,6 +32,7 @@ Route::get('callback', [MpesaController::class, 'handleCallback']);
 
 
 Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
+    
     Route::post('create/roles',[AdminController::class,'createroles']);
     Route::post('create/newusers',[AdminController::class,'createAccounts']);
     Route::post('create/species',[AdminController::class,'createspecies']);
