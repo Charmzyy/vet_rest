@@ -20,7 +20,7 @@ return new class extends Migration
             $table->uuid('pet_id');
             $table->uuid('owner_id');
             $table->timestamps();
-            $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
+            $table->foreign('room_id')->references('id')->on('booking_rooms')->onDelete('cascade');
             $table->foreign('pet_id')->references('id')->on('pets')->onDelete('cascade');
             $table->foreign('owner_id')->references('id')->on('users')->onDelete('cascade');
         });
