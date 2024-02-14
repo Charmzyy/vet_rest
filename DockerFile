@@ -1,37 +1,21 @@
-# Use the official PHP image as base
-FROM php:8.2.12-cli
 
-# Install system dependencies
-RUN apt-get update -y && apt-get install -y nginx libmcrypt-dev libonig-dev unzip zlib1g-dev libzip-dev
-
-# Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-# Set Composer environment variables
+FROM php:8.2.12-fpm
+ 
+COPY . .
+ 
+# Image config
+ENV SKIP_COMPOSER 1
+ENV WEBROOT /var/www/html/public
+ENV PHP_ERRORS_STDERR 1
+ENV RUN_SCRIPTS 1
+ENV REAL_IP_HEADER 1
+ 
+# Laravel config
+ENV APP_ENV production
+ENV APP_DEBUG false
+ENV LOG_CHANNEL stderr
+ 
+# Allow composer to run as root
 ENV COMPOSER_ALLOW_SUPERUSER 1
-
-# Set working directory
-WORKDIR /app
-
-# Copy files from current directory to working directory
-COPY . /app
-
-COPY conf/nginx/nginx-site.conf /etc/nginx/sites-available/default
-RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-
-
-
-
-# Install PHP dependencies
-RUN composer install
-
-# Link storage
-RUN php artisan storage:link
-
-# Expose port 8001
-EXPOSE 8001
-
-
-# Start Nginx and PHP
-
-CMD  php artisan serve --host=0.0.0.0 --port=8001
+ 
+CMD ["/start.sh"]
