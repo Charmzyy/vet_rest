@@ -4,6 +4,6 @@ services:
   php:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: DockerFile
     ports:
       - "8001:8001"
