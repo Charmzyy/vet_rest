@@ -8,11 +8,4 @@ services:
     ports:
       - "8001:8001"
 
-  nginx:
-    build:
-      context: .
-      dockerfile: DockerFile.nginx
-    ports:
-      - "80:80"
-    depends_on:
-      - php
+  
