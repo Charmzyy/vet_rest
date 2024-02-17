@@ -2,11 +2,11 @@
 FROM php:8.2.12-cli
 
 # Update and install necessary dependencies
-RUN apt-get update && \
-    apt-get install -y postgresql-client libmcrypt-dev libonig-dev unzip zlib1g-dev libzip-dev
+RUN apt-get update -y && apt-get install -y libmcrypt-dev libonig-dev unzip zlib1g-dev libzip-dev postgresql-client
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo pdo_pgsql mbstring zip
+# Install PostgreSQL client and required PHP extensions
+RUN apt-get install -y libpq-dev \
+    && docker-php-ext-install pdo pdo_pgsql mbstring zip
 
 # Copy Composer binary into PATH
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
