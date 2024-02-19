@@ -64,8 +64,7 @@ class MpesaController extends Controller
      */
     public function sendMoney()
     {
-        // $user = auth()->user();
-        // $userNumber = $user->phone;
+        
         $accessToken = $this->testpay();
         $response = Http::withHeaders(
             [
@@ -75,13 +74,13 @@ class MpesaController extends Controller
             ])->post('https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest', 
             [
         "BusinessShortCode" => "174379",
-        "Password" => base64_encode('BusinessShortcode'+'Passkey'+'Timestamp'),
+        "Password" => base64_encode('BusinessShortcode'+ ' gggigigi'+'Timestamp'),
         "Timestamp" => date('YmdHis'), // Use current timestamp
         "TransactionType" => "CustomerPayBillOnline",
         "Amount" => "1",
-        "PartyA" => '+254712849736',
+        "PartyA" => '254712849736',
         "PartyB" => "174379",
-        "PhoneNumber" => '+254712849736',
+        "PhoneNumber" => '254712849736',
         "CallBackURL" => "https://new-vetio-project.onrender.com/api/callback",
         "AccountReference" => "Test",
         "TransactionDesc" => "Test"
