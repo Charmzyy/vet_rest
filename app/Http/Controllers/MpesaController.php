@@ -82,7 +82,7 @@ class MpesaController extends Controller
         "PartyA" => '254712849736',
         "PartyB" => "174379",
         "PhoneNumber" => '254712849736',
-        "CallBackURL" => " https://shy-turkeys-pay.loca.lt/api/callback",
+        "CallBackURL" => "https://new-vetio-project.onrender.com/api/callback",
         "AccountReference" => "Test",
         "TransactionDesc" => "Test"
             
@@ -94,9 +94,7 @@ class MpesaController extends Controller
             // Extract necessary data from the response if needed
             $merchantRequestID = $responseData['MerchantRequestID'];
             $checkoutRequestID = $responseData['CheckoutRequestID'];
-            // You can extract more data as needed
-    
-            // Return the response or any necessary data
+           
             return response()->json([
                 'success' => true,
                 'message' => 'Payment request initiated successfully',
@@ -123,11 +121,8 @@ class MpesaController extends Controller
     // Log the callback data for debugging or auditing
     Log::info('M-Pesa Callback Received:', $request->all());
 
-    // Process the callback data and update your application's state
-    // For example, you might update the transaction status in your database
 
-    // Respond with a success message to acknowledge receipt of the callback
-    return response()->json(['message' => 'Callback received'], 200);
+    
 }
 
     /**
