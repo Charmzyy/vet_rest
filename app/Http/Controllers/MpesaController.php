@@ -67,6 +67,7 @@ class MpesaController extends Controller
         try {
             //code...
             $accessToken = $this->testpay();
+            $password  =  ('BusinessShortcode'+'lglglg'+'Timestamp');
         $response = Http::withHeaders(
             [
                 'Authorization' => 'Bearer ' . $accessToken,
@@ -75,7 +76,7 @@ class MpesaController extends Controller
             ])->post('https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest', 
             [
         "BusinessShortCode" => "174379",
-        "Password" => base64_encode('BusinessShortcode'+ ' gggigigi'+'Timestamp'),
+        "Password" => base64_encode($password),
         "Timestamp" => date('YmdHis'), // Use current timestamp
         "TransactionType" => "CustomerPayBillOnline",
         "Amount" => "1",
