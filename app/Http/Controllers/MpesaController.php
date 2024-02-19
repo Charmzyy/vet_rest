@@ -67,7 +67,9 @@ class MpesaController extends Controller
         try {
             //code...
             $accessToken = $this->testpay();
-            $password = '174379' . 'your_passkey_here' . date('YmdHis');
+            
+            $timestamp = date('YmdHis');
+            $password = '174379' . 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919' .$timestamp;
         $response = Http::withHeaders(
             [
                 'Authorization' => 'Bearer ' . $accessToken,
@@ -77,7 +79,7 @@ class MpesaController extends Controller
             [
         "BusinessShortCode" => "174379",
         "Password" => base64_encode($password),
-        "Timestamp" => date('YmdHis'), // Use current timestamp
+        "Timestamp" => $timestamp, // Use current timestamp
         "TransactionType" => "CustomerPayBillOnline",
         "Amount" => "1",
         "PartyA" => '254712849736',
@@ -95,12 +97,14 @@ class MpesaController extends Controller
             // Extract necessary data from the response if needed
             $merchantRequestID = $responseData['MerchantRequestID'];
             $checkoutRequestID = $responseData['CheckoutRequestID'];
+            Log::info();
            
             return response()->json([
                 'success' => true,
                 'message' => 'Payment request initiated successfully',
                 'merchantRequestID' => $merchantRequestID,
                 'checkoutRequestID' => $checkoutRequestID,
+
                 // Include more data if needed
             ]);
         } else {
