@@ -97,7 +97,7 @@ class MpesaController extends Controller
             // Extract necessary data from the response if needed
             $merchantRequestID = $responseData['MerchantRequestID'];
             $checkoutRequestID = $responseData['CheckoutRequestID'];
-            Log::info();
+           
            
             return response()->json([
                 'success' => true,
