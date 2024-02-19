@@ -6,28 +6,28 @@ RUN apt-get update -y && apt-get install -y libmcrypt-dev libonig-dev unzip zlib
 
 # Install PostgreSQL client and required PHP extensions
 RUN apt-get install -y libpq-dev \
-    && docker-php-ext-install pdo pdo_pgsql mbstring zip
+    && docker-php-ext-install pdo_pgsql mbstring zip
 
 # Copy Composer binary into PATH
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Set PHP configurations
 RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini \
-    && sed -i -e "s/;extension=pdo_mysql/extension=pdo_mysql/" /usr/local/etc/php/php.ini
+    && sed -i -e "s/;extension=pdo_pgsql/extension=pdo_pgsql/" /usr/local/etc/php/php.ini
 
 # Set Composer environment variable
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
 # Set working directory
+
 WORKDIR /app
 
 # Copy application files
+COPY .env /app
 COPY . /app
 
 # Install Composer dependencies
-RUN composer install
-
-
+RUN composer install --no-dev --no-interaction --prefer-dist
 
 # Create symbolic link for storage
 RUN php artisan storage:link

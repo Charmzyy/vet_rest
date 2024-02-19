@@ -4,6 +4,22 @@ services:
   php:
     build:
       context: .
-      dockerfile: DockerFile
+      dockerfile: Dockerfile
     ports:
       - "8001:8001"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: vet_project
+      POSTGRES_USER: mwai
+      POSTGRES_PASSWORD: jdH9I8DBQts8UrTpCtr6ZZ0OvdyP8XBW
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
