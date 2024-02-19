@@ -67,7 +67,7 @@ class MpesaController extends Controller
         try {
             //code...
             $accessToken = $this->testpay();
-            $password = 'BusinessShortcode' . 'your_passkey_here' . date('YmdHis');
+            $password = '174379' . 'your_passkey_here' . date('YmdHis');
         $response = Http::withHeaders(
             [
                 'Authorization' => 'Bearer ' . $accessToken,
