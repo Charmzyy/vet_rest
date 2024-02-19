@@ -64,8 +64,9 @@ class MpesaController extends Controller
      */
     public function sendMoney()
     {
-        
-        $accessToken = $this->testpay();
+        try {
+            //code...
+            $accessToken = $this->testpay();
         $response = Http::withHeaders(
             [
                 'Authorization' => 'Bearer ' . $accessToken,
@@ -110,6 +111,13 @@ class MpesaController extends Controller
                 'error' => $errorResponse,
             ], $response->status());
         }
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json([
+                $th->getMessage()
+            ],500);
+        }
+        
     }
 
     /**
