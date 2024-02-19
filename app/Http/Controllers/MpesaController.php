@@ -75,13 +75,13 @@ class MpesaController extends Controller
             ])->post('https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest', 
             [
         "BusinessShortCode" => "174379",
-        "Password" => "MTc0Mzc5YmZiMjc5ZjlhYTliZGJjZjE1OGU5N2RkNzFhNDY3Y2QyZTBjODkzMDU5YjEwZjc4ZTZiNzJhZGExZWQyYzkxOTIwMTYwMjE2MTY1NjI3",
+        "Password" => base64_encode('BusinessShortcode'+'Passkey'+'Timestamp'),
         "Timestamp" => date('YmdHis'), // Use current timestamp
         "TransactionType" => "CustomerPayBillOnline",
         "Amount" => "1",
-        "PartyA" => '254712849736',
+        "PartyA" => '+254712849736',
         "PartyB" => "174379",
-        "PhoneNumber" => '254712849736',
+        "PhoneNumber" => '+254712849736',
         "CallBackURL" => "https://new-vetio-project.onrender.com/api/callback",
         "AccountReference" => "Test",
         "TransactionDesc" => "Test"
