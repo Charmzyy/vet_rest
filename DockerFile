@@ -24,6 +24,9 @@ WORKDIR /app
 
 # Copy application files
 COPY .env /app
+
+
+
 COPY . /app
 
 # Install Composer dependencies
