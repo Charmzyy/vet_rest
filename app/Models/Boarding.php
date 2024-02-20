@@ -25,5 +25,7 @@ class Boarding extends Model
         'room'
 
     ];
-    
+public function room(){
+    return $this->hasOne(Booking_room::class);
+}
 }

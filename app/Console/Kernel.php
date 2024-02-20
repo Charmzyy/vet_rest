@@ -11,21 +11,16 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      */
+
+     protected $commands = [
+        Commands\CloseAppointments::class,
+    ];
+    
     protected function schedule(Schedule $schedule): void
     {
-    
-        $schedule->call(function () {
-
-            $unattendedappointments = Appointment::where('status','confirmed')
-                                                   ->where('book_date', '<' , now())
-                                                   ->get();
-            foreach ($unattendedappointments as $appointment) {
-                $appointment->status  = 'close';
-                $appointment->save();
-                # code...
-            }
-
-        });
+        $schedule->command('rooms:update-status')->daily();
+        $schedule->command('appointments:close')->daily();
+        
     }
 
     /**

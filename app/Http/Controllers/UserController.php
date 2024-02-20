@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\CancelledAppointment;
 use DateTime;
 use Carbon\Carbon;
 use App\Models\Pet;
 use App\Rules\PastDate;
+use App\Models\Boarding;
 use App\Models\Appointment;
 use App\Mail\RescheduleMail;
+use App\Models\Booking_room;
 use Illuminate\Http\Request;
+use App\Mail\CancelledAppointment;
 use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
@@ -100,9 +102,50 @@ class UserController extends Controller
      * Store a newly created resource in storage.
      */
     public function book(Request $request,string $id)
-    {
+    {   try {
+        //code...
+        $today = Carbon::now();
+        $pet = Pet::findOrfail($id);
+        
+  
+        $user = auth()->user()->id;
+        $validateData = $request->validate([
+            'reservation' =>'required',
+            'start'=>'required|date|after_or_equal:'.$today->toDateString(),
+            'end'=>'required|after:' .$today->toDateString(),
+            'room_id'=>'required',
+        ]);
 
-        //TODO:BOOK ROOOM
+        $room = Booking_room::findOrfail($validateData['room_id']);
+        if ($room->status !== 'available') {
+            return response()->json(['error' => 'Room is not available for booking.'], 422);
+        }
+    
+        // Create the booking
+        $newBook = Boarding::create([
+            'reservation' => $validateData['reservation'],
+            'start' => $validateData['start'],
+            'end' => $validateData['end'],
+            'room_id' => $room->id,
+            'pet_id' => $pet->id,
+            'owner_id' => $user->id,
+        ]);
+        
+        
+        $room->status = 'booked';
+        $room->save();
+
+        return response()->json([
+            'newbooking', $newBook,
+            'message','Created Succesfully'
+        ],201);
+    } catch (\Throwable $th) {
+        
+        return response()->json([
+            $th->getMessage()],500);
+    }
+        
+
 
         
         

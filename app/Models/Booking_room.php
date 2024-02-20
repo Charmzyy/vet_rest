@@ -16,4 +16,8 @@ class Booking_room extends Model
         'name',
         'status'
     ];
+
+public function booking(){
+    return $this->belongsTo(Boarding::class);
+}
 }
