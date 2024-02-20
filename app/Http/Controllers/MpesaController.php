@@ -67,7 +67,7 @@ class MpesaController extends Controller
         try {
             //code...
             $accessToken = $this->testpay();
-            
+            $phone = auth()->user()->phone;
             $timestamp = date('YmdHis');
             $password = '174379' . 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919' .$timestamp;
         $response = Http::withHeaders(
@@ -82,9 +82,9 @@ class MpesaController extends Controller
         "Timestamp" => $timestamp, // Use current timestamp
         "TransactionType" => "CustomerPayBillOnline",
         "Amount" => "1",
-        "PartyA" => '254712849736',
+        "PartyA" => $phone,
         "PartyB" => "174379",
-        "PhoneNumber" => '254712849736',
+        "PhoneNumber" => $phone,
         "CallBackURL" => "https://new-vetio-project.onrender.com/api/callback",
         "AccountReference" => "Test",
         "TransactionDesc" => "Test"

@@ -10,6 +10,7 @@ use App\Mail\NewUser;
 use App\Models\Breed;
 use App\Models\Specie;
 use App\Models\Appointment;
+use App\Models\Booking_room;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -341,4 +342,32 @@ try {
         }
        
     }
+
+public function make_rooms(Request $request){
+
+    try {
+        //code...
+        $validateData = $request->validate([
+            'name' => 'required',
+    
+           ]);
+           $room = Booking_room::create([
+            'name' => $validateData['name']
+           ]);
+    
+           return response()->json([
+            'room' => $room,
+            'messsage'=> 'room created succesfully'
+           ],201);
+    
+       } catch (\Throwable $th) {
+        //throw $th;
+        return response()->json([
+            $th->getMessage()
+        ],500);
+       }
+       
+}
+
+
 }

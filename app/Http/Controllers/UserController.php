@@ -99,10 +99,13 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function book(Request $request,string $id)
     {
+
         //TODO:BOOK ROOOM
-        //TODO:PAY MPESA
+
+        
+        
     }
 
     /**
@@ -154,8 +157,8 @@ class UserController extends Controller
         if($now->diffInHours($appointmentDateTime) <= 24)
         {
 
-            // $mpesaController = new MpesaController();
-            // $mpesaController->sendMoney();
+             $mpesaController = new MpesaController();
+             $mpesaController->sendMoney();
 
             return response()->json([
                 'Message ' => 'To finsh this you need to pay price for late cancellation '
