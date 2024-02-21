@@ -31,7 +31,7 @@ class UserController extends Controller
                 'pet_name'=>'required',
                 'species_id'=>'required',
                 'breed_id' => 'required',
-                'dob' => ['required', new PastDate]
+                'dob' => ['required|before:' . $today->toDateString()]
                 
     
             ]);
@@ -172,7 +172,6 @@ class UserController extends Controller
     $mpesaController = new MpesaController();
     $response = $mpesaController->sendMoney($id,$amount);
     
-    
     return response()->json([
 'response'=> $response
     ]);
@@ -186,7 +185,6 @@ class UserController extends Controller
         $serviceCount = $appointment->services->count();
         $services = $appointment->services;
         foreach ($services as $service) {
-            
             $serviceDetails[] = [
                 'name' => $service->name,
                 'price' => $service->price,
@@ -200,7 +198,6 @@ class UserController extends Controller
 
     public function rescheduleAppointment(Request $request,$id)
     {
-        //reschedule
         $appointment = Appointment::findOrfail($id);
         $doctorname = $appointment->myDoctor->firstname;
         if($appointment->doc_id){
@@ -222,15 +219,11 @@ class UserController extends Controller
         $appointment->book_time = $book_time;
         $appointment->doc_id = null;
         $appointment->save();
-
         return response()->json([
             'message'=> 'rescheduled',
-
         ],201);
-        
     }
 
-   
     public function cancelAppointment($id)
     {   
         $appointment= Appointment::findOrfail($id);
@@ -239,10 +232,6 @@ class UserController extends Controller
         $appointmentDateTime =Carbon::parse($appointment->book_date . ' ' . $appointment->book_time);
         if($now->diffInHours($appointmentDateTime) <= 24)
         {
-
-             $mpesaController = new MpesaController();
-            
-
             return response()->json([
                 'Message ' => 'To finsh this you need to pay price for late cancellation '
             ]);
@@ -259,31 +248,11 @@ class UserController extends Controller
                     'name'=>$doctorname,
         ];
         $appointment->delete();
-
         if ($doctoremail && $appointment->status === 'confirmed') {
             Mail::to($doctoremail)->send(new CancelledAppointment($data));
         }
-        
         return response()->json([
             'message' => 'appointment cancelled'
         ],201);
-
-
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

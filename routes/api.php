@@ -23,8 +23,8 @@ use App\Http\Controllers\MpesaController;
 
 Route::get('testpay', [MpesaController::class, 'testpay']);
 Route::get('hello', [MpesaController::class, 'index']);
-Route::post('send', [MpesaController::class, 'sendMoney']);
-Route::post('callback', [MpesaController::class, 'handleCallback']);
+
+
 
 
 //admin
@@ -65,6 +65,14 @@ Route::middleware(['auth:sanctum', 'is_user'])->group(function () {
     Route::post('create/{id}/appointment',[UserController::class,'createappointment']);
     Route::put('reshedule/{id}/appointment',[UserController::class,'rescheduleAppointment']);
     Route::delete('close/{id}/appointment',[UserController::class,'cancelAppointment']);
+    Route::post('send', [MpesaController::class, 'sendMoney']);
+    Route::post('callback', [MpesaController::class, 'handleCallback']);
+    Route::get('appointment/{id}/invoice',[UserController::class,'invoiceSpecs']);
+    Route::post('pay/{id}/bill',[UserController::class,'payBill']);
+    Route::get('appointments/mybills',[UserController::class,'mybills']);
+    Route::post('pet{id}/bookboarding',[UserController::class,'book']);
+    
+    
     
     
     

@@ -12,12 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('invoices', function (Blueprint $table) {
-            $table->uuid('id')->primary;
+            $table->uuid('id')->primary();
             $table->uuid('appointment_id');
-            $table->uuid('amount');
+            $table->bigInteger('amount');
             $table->uuid(' due_date');
             $table->enum('status',['pending','paid','overdue'])->default('pending');
             $table->timestamps();
+            
             $table->foreign('appointment_id')->references('id')->on('appointments');
         });
     }

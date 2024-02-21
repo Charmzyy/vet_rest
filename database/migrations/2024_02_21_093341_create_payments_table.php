@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('user_id');
             $table->uuid('invoice_id');
-            $table->number('amount');
+            $table->bigInteger('amount');
             $table->unsignedBigInteger('merchant_request_id');
             $table->unsignedBigInteger('checkout_request_id');
             $table->foreign('user_id')->references('id')->on('users');
