@@ -2,12 +2,12 @@ In a veterinary application, here are some additional details crucial for a doct
 
 1. **Appointment Management**:
    - Ability to view upcoming appointments. --done 
-   - Ability to confirm, reschedule, or cancel appointments. --with no mpesa yet
+   - Ability to confirm, reschedule, or cancel appointments. --done
    - Notification system for new appointments and changes in appointments. --mail done
 
 2. **Patient Management**:
    - Ability to view patient details including medical history, vaccinations, and previous treatments.--done
-   - Recording and updating patient information such as weight, age, breed, and owner details.
+   - Recording and updating patient information such as weight, age, breed, and owner details.--done
    - Ability to add notes and observations about patients' conditions.--done
 
 3. **Medical Records**:
@@ -32,7 +32,7 @@ mm
    - Integration with pharmacy systems for sending prescriptions electronically.
 
 7. **Billing and Invoicing**:
-   - Generating invoices for services provided.
+   - Generating invoices for services provided. --auto pay bill 
    - Tracking payments and outstanding balances.
    - Integration with accounting software for financial management.
 

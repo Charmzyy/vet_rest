@@ -83,6 +83,11 @@ class UserController extends Controller
                 'pet_id' => $id,
     
             ]);
+
+            $mpesaController = new MpesaController();
+            $mpesaController->sendMoney();
+
+            
     
             return response()->json([
                 'appointment' => $appointment,
