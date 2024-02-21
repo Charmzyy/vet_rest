@@ -50,4 +50,12 @@ class Appointment extends Model
     public function myOwner(){
         return $this->hasOne(User::class);
     }
+
+    public function myinvoice(){
+        return $this->hasOne(Invoice::class);
+    }
+
+    public function services(){
+        return $this->belongsTo('appointment_service','appointment_id','service_id');
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Pet;
+use App\Models\Service;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use App\Models\MedicalRecord;
@@ -258,5 +259,30 @@ class DoctorController extends Controller
      
 
     }
+
+    public function createService(Request $request, string $id)
+{
+    $appointment = Appointment::findOrFail($id);
+    $validatedData = $request->validate([
+        'service_id' => 'required|exists:services,id',
+    ]);
+    
+    $serviceId = $validatedData['service_id'];
+    $appointment->services()->attach($serviceId);
+    return response()->json([
+        'Messsage'=>'Service added successfully'
+    ],201);
+
+    $services = $appointment->services();
+
+    $totalAmount = $services->sum('prices');
+
+    $invoice = $appointment->invoice();
+    $invoice->amount = $totalAmount;
+    $today = Carbon::now();
+    $duedate = $today->addWeeks(2);
+    $invoice->due_date = $duedate;
+    
+}
     
 }

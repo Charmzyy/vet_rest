@@ -13,12 +13,11 @@ use App\Models\Booking_room;
 use Illuminate\Http\Request;
 use App\Mail\CancelledAppointment;
 use Illuminate\Support\Facades\Mail;
+use PhpParser\Node\Stmt\TryCatch;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+   
     public function createpet(Request $request)
     {
         //
@@ -58,9 +57,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function createappointment(Request $request, $id)
     {
         try {
@@ -83,29 +79,16 @@ class UserController extends Controller
                 'pet_id' => $id,
     
             ]);
-
-            $mpesaController = new MpesaController();
-            $mpesaController->sendMoney();
-
-            
-    
             return response()->json([
                 'appointment' => $appointment,
                 'message' => 'appointment created succesfully '
             ]);
-
         } catch (\Throwable $th) {
-            //throw $th;
-
             return response()->json([
                 $th->getMessage()],500);
         }
        
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function book(Request $request,string $id)
     {   try {
         //code...
@@ -136,10 +119,8 @@ class UserController extends Controller
             'owner_id' => $user->id,
         ]);
         
-        
         $room->status = 'booked';
         $room->save();
-
         return response()->json([
             'newbooking', $newBook,
             'message','Created Succesfully'
@@ -148,17 +129,60 @@ class UserController extends Controller
         
         return response()->json([
             $th->getMessage()],500);
+    }}
+
+    public function mybills(){
+        try {
+            //code...
+        $me = auth()->user()->id;
+        $appointments = Appointment::where('owner_id',$me)->get();
+        $myInvoices = [
+
+        ];
+        foreach ($appointments as $appointment) {
+            $appointmentId = $appointment->id;
+            $pet = $appointment->pet->pet_name;
+            $amount = $appointment->myinvoice->amount;
+            
+
+            $myInvoices [] = [
+            'appointmentId'=>$appointmentId,
+            'pet'=>$pet,
+            'amount'=>$amount
+            ];
+        }
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json([
+                $th->getMessage()
+            ],500);
+        }  
     }
-        
 
+    public function  invoiceSpecs(string $id){
 
-        
-        
+        $appointment = Appointment::findOrfail($id);
+        $serviceNames = [
+
+        ];
+        $ServiceCount = $appointment->services::count();
+        $services = $appointment->services;
+        foreach ($services as $service) {
+
+            $serviceNames[] = $service->name;
+
+        }
+
+        return response()->json([
+            'names' => $serviceNames,
+            'count' => $ServiceCount
+
+        ]);
+    
+
     }
 
-    /**
-     * Display the specified resource.
-     */
+     
     public function rescheduleAppointment(Request $request,$id)
     {
         //reschedule
