@@ -1,22 +1,14 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Invoice;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 
 class MpesaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        return response()->json(['message' => 'hello world']);
-    }
-    /**
-     * Show the form for creating a new resource.
-     */
     public function testpay(){
 
         try {
@@ -62,7 +54,7 @@ class MpesaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function sendMoney()
+    public function sendMoney($invoiceId,$amount)
     {
         try {
             //code...
@@ -81,7 +73,7 @@ class MpesaController extends Controller
         "Password" => base64_encode($password),
         "Timestamp" => $timestamp, // Use current timestamp
         "TransactionType" => "CustomerPayBillOnline",
-        "Amount" => "1",
+        "Amount" => $amount,
         "PartyA" => $phone,
         "PartyB" => "174379",
         "PhoneNumber" => $phone,
@@ -98,9 +90,23 @@ class MpesaController extends Controller
             $merchantRequestID = $responseData['MerchantRequestID'];
             $checkoutRequestID = $responseData['CheckoutRequestID'];
            
-           
+            $payment = Payment::create([
+                'user_id' => auth()->id(),
+                'invoice_id' => $invoiceId,
+                'amount' => $amount,
+                'merchant_request_id' => $merchantRequestID,
+                'checkout_request_id' => $checkoutRequestID,
+                // Add more fields as needed
+            ]);
+
+            // Update invoice status to 'paid'
+            $invoice = Invoice::findOrFail($invoiceId);
+            $invoice->update(['status' => 'paid']);
+
+
             return response()->json([
                 'success' => true,
+                'payment'=> $payment,
                 'message' => 'Payment request initiated successfully',
                 'merchantRequestID' => $merchantRequestID,
                 'checkoutRequestID' => $checkoutRequestID,

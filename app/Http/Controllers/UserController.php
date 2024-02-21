@@ -5,15 +5,16 @@ namespace App\Http\Controllers;
 use DateTime;
 use Carbon\Carbon;
 use App\Models\Pet;
+use App\Models\Invoice;
 use App\Rules\PastDate;
 use App\Models\Boarding;
 use App\Models\Appointment;
 use App\Mail\RescheduleMail;
 use App\Models\Booking_room;
 use Illuminate\Http\Request;
+use PhpParser\Node\Stmt\TryCatch;
 use App\Mail\CancelledAppointment;
 use Illuminate\Support\Facades\Mail;
-use PhpParser\Node\Stmt\TryCatch;
 
 class UserController extends Controller
 {
@@ -143,12 +144,16 @@ class UserController extends Controller
             $appointmentId = $appointment->id;
             $pet = $appointment->pet->pet_name;
             $amount = $appointment->myinvoice->amount;
+            $dueDate = $appointment->myinvoice->due_date;
+            $invoiceId = $appointment->myinvoice->id;
             
 
             $myInvoices [] = [
+            'invoiceId'=>$invoiceId,  
             'appointmentId'=>$appointmentId,
             'pet'=>$pet,
-            'amount'=>$amount
+            'amount'=>$amount,
+            'dueDate'=>$dueDate
             ];
         }
         } catch (\Throwable $th) {
@@ -159,30 +164,40 @@ class UserController extends Controller
         }  
     }
 
-    public function  invoiceSpecs(string $id){
+    public function payBill(string $id){
 
-        $appointment = Appointment::findOrfail($id);
-        $serviceNames = [
+    $invoice = Invoice::findOrfail($id);
+    $amount = $invoice->amount;
 
-        ];
-        $ServiceCount = $appointment->services::count();
-        $services = $appointment->services;
-        foreach ($services as $service) {
-
-            $serviceNames[] = $service->name;
-
-        }
-
-        return response()->json([
-            'names' => $serviceNames,
-            'count' => $ServiceCount
-
-        ]);
+    $mpesaController = new MpesaController();
+    $response = $mpesaController->sendMoney($id,$amount);
     
+    
+    return response()->json([
+'response'=> $response
+    ]);
 
     }
 
-     
+    public function invoiceSpecs(string $id)
+    {
+        $appointment = Appointment::findOrFail($id);
+        $serviceDetails = [];
+        $serviceCount = $appointment->services->count();
+        $services = $appointment->services;
+        foreach ($services as $service) {
+            
+            $serviceDetails[] = [
+                'name' => $service->name,
+                'price' => $service->price,
+            ];
+        }
+        return response()->json([
+            'details' => $serviceDetails,
+            'count' => $serviceCount,
+        ]);
+    }
+
     public function rescheduleAppointment(Request $request,$id)
     {
         //reschedule
@@ -201,16 +216,12 @@ class UserController extends Controller
         ];
         Mail::to($doctoremail)->send(new RescheduleMail($data));
 
-       
         $book_date = $request->input('book_date');
         $book_time= $request->input('book_time');
         $appointment->book_date = $book_date;
         $appointment->book_time = $book_time;
         $appointment->doc_id = null;
         $appointment->save();
-
-     
-        
 
         return response()->json([
             'message'=> 'rescheduled',
@@ -230,7 +241,7 @@ class UserController extends Controller
         {
 
              $mpesaController = new MpesaController();
-             $mpesaController->sendMoney();
+            
 
             return response()->json([
                 'Message ' => 'To finsh this you need to pay price for late cancellation '
