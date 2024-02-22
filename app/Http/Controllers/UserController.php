@@ -31,7 +31,8 @@ class UserController extends Controller
                 'pet_name'=>'required',
                 'species_id'=>'required',
                 'breed_id' => 'required',
-                'dob' => ['required|before:' . $today->toDateString()]
+                'dob' => ['required', 'date', 'before_or_equal:' . $today->toDateString()]
+
                 
     
             ]);
