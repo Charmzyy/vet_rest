@@ -91,7 +91,7 @@ class AdminController extends Controller
     
                 ];
 
-                $newUser->role_id =  $validateData['role_id'];
+                $newUser->role_id = 1;
                 $newUser->is_available  = true;
                 $newUser->save();
                 Mail::to($newUser->email)->send(new NewUser($data));
