@@ -11,6 +11,7 @@ use App\Models\Breed;
 use App\Models\Specie;
 use App\Models\Appointment;
 use App\Models\Booking_room;
+use App\Models\Department;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -20,7 +21,7 @@ class AdminController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function createroles(Request $request)
+    public function createdept(Request $request)
 
     {    try {
         //code...
@@ -29,14 +30,14 @@ class AdminController extends Controller
             'description'=>'required',
          ]);
  
-         $role = Role::create([
+         $department = Department::create([
              'name'=>$validateData['name'],
              'description'=>$validateData['description']
          ]);
          
  
          return response()->json([ 
-           'role'=> $role
+           'role'=> $department
  
          ]);
 

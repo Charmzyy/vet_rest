@@ -32,7 +32,7 @@ Route::get('hello', [MpesaController::class, 'index']);
 
 
 Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
-    Route::post('create/roles',[AdminController::class,'createroles']);
+    Route::post('create/departments',[AdminController::class,'createdept']);
     Route::post('create/newusers',[AdminController::class,'createAccounts']);
     Route::post('create/species',[AdminController::class,'createspecies']);
     Route::post('create/breeds',[AdminController::class,'createbreeds']);
