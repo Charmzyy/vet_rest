@@ -77,7 +77,7 @@ class AdminController extends Controller
                     'firstname' => $validateData['firstname'],
                     'lastname' => $validateData['lastname'],
                     'email' => $validateData['email'],
-                    'role_id'=>$validateData['role_id'],
+                    'dept_id'=>$validateData['dept_id'],
                     'password'=>$password,
                     'confirm_password'=>$password
                      
