@@ -225,7 +225,7 @@ class AdminController extends Controller
                 ]);
             }
             
-            $exisitingRoomAppointments = Appointment::where('room', $room->id)
+            $exisitingRoomAppointments = Appointment::where('room_number', $room->id)
                                            ->where('id', '!=', $id)
                                            ->where('book_date', $appointment->book_date)
                                            ->where('book_time',$appointment->book_time)
