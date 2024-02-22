@@ -20,7 +20,9 @@ class AuthController extends Controller
             'lastname'=>'required',
             'email'=>'required|email|unique:users',
             'password'=>'required|same:confirm_password|min:8',
-            'confirm_password'=>'required'
+            'confirm_password'=>'required',
+            'phone' => 'required|regex:/^\+254[0-9]{9}$/'
+
 
 
         ]);
@@ -32,7 +34,7 @@ class AuthController extends Controller
             'email' => $validateData['email'],
             'password' =>Hash::make($validateData['password']),
             'confirm_password' => $validateData['confirm_password'],
-
+            'phone' => $validateData['phone'],
         ]);
 
         if (User::count() == 1) {

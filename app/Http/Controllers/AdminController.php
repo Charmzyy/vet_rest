@@ -66,7 +66,7 @@ class AdminController extends Controller
                 'firstname'=>'required',
                 'lastname'=>'required',
                 'email'=>'required|email|unique:users',
-                'role_id'=>'required'
+                'dept_id'=>'required'
                 
                 ] 
     
