@@ -22,7 +22,7 @@ class Appointment extends Model
         'owner_id',
         'book_date',
         'book_time',
-        'room'
+        'room_number'
 
     ];
 

@@ -48,7 +48,7 @@ class UserController extends Controller
     
             return response()->json([
                 'pet' => $pet,
-                'message' => 'appointment created succesfully '
+                'message' => 'created succesfully '
             ]);
 
         } catch (\Throwable $th) {
